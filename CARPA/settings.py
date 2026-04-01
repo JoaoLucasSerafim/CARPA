@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-wmnk$@b(##%(&k8m0e-42e!$@=&t%ibq-ev2-6-8jl8d8qoqbr
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['carpapa.azurewebsites.net']
+ALLOWED_HOSTS = ['carpapa.azurewebsites.net', 'localhost', '127.0.0.1']
 
 
 # Application definition
