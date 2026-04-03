@@ -1,17 +1,48 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página Inicial</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    
-        <h1>Carpa</h1>
-        <p>A ferramenta de apoio para tecnicos e agricultores</p>
-        <a href="login_home/"><button>Entrar</button></a>
-        <button>Sobre o projeto</button>
+{% extends 'base.html' %}
 
-</body>
-</html>
+{% block titulo %}Página Inicial - CARPAPA{% endblock %}
+
+{% block conteudo %}
+<div class="container">
+    <section class="hero text-center">
+        <h1>🌿 CARPAPA</h1>
+        <p class="mb-3">Cadastro Ambiental Rural Popular Avançado do Pará</p>
+        <p class="mb-3">Ferramenta de apoio para técnicos e agricultores realizarem o Cadastro Ambiental Rural (CAR) de forma simples e acessível.</p>
+
+        <div class="hero-actions">
+            {% if not user.is_authenticated %}
+                <a href="{% url 'login' %}" class="btn-principal">Entrar</a>
+                <a href="{% url 'cadastro_agricultor' %}" class="btn-secundario">Criar Conta</a>
+            {% else %}
+                {% if user.perfil_agricultor %}
+                    <a href="{% url 'dashboard_agricultor' %}" class="btn-principal">Meu Cadastro</a>
+                {% elif user.perfil_tecnico %}
+                    <a href="{% url 'dashboard_tecnico' %}" class="btn-principal">Painel Técnico</a>
+                {% endif %}
+            {% endif %}
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="card">
+            <h2 class="card-title">Para Agricultores</h2>
+            <ul>
+                <li>✅ Cadastro simplificado do CAR</li>
+                <li>✅ Acompanhamento em tempo real</li>
+                <li>✅ Validação automática de dados</li>
+                <li>✅ Suporte acessível em Libras</li>
+            </ul>
+        </div>
+
+        <div class="card">
+            <h2 class="card-title">Para Técnicos</h2>
+            <ul>
+                <li>✅ Análise rápida de cadastros</li>
+                <li>✅ Painel administrativo completo</li>
+                <li>✅ Validação técnica especializada</li>
+                <li>✅ Relatórios e estatísticas</li>
+            </ul>
+        </div>
+    </section>
+</div>
+{% endblock %}
