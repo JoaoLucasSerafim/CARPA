@@ -1,22 +1,48 @@
-<!DOCTYPE html>
-<html lang="pt-Br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página de Login</title>
-</head>
-<body>
-    <h1>Bem vindo! Aqui é o login</h1>
-    <a href="login_agro">
-        <button>
-            Agricultor
-        </button>
-    </a>
+{% extends 'base.html' %}
 
-    <a href="login_tec">
-        <button>
-            Tecnico
-        </button>
-    </a>
-</body>
-</html>
+{% block titulo %}Login - CARPAPA{% endblock %}
+
+{% block conteudo %}
+<div class="container">
+    <div class="card">
+        <h1 class="card-title text-center">Entrar no CARPAPA</h1>
+
+        <p class="text-center mb-3">Selecione seu tipo de usuário:</p>
+
+        <div class="login-options">
+            <a href="{% url 'login' %}" class="btn-principal">
+                🌾 Sou Agricultor
+            </a>
+
+            <a href="{% url 'login' %}" class="btn-principal">
+                👨‍💼 Sou Técnico
+            </a>
+        </div>
+
+        <div class="text-center mt-3">
+            <p>Ainda não tem conta?</p>
+            <a href="{% url 'cadastro_agricultor' %}" class="btn-secundario">
+                Criar Conta de Agricultor
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+.login-options {
+    display: grid;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.login-options .btn-principal {
+    padding: 1.5rem;
+    font-size: 1.125rem;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+}
+</style>
+{% endblock %}

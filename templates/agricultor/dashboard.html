@@ -1,0 +1,333 @@
+{% extends 'base.html' %}
+{% load carpa_filters %}
+
+{% block titulo %}Meu Cadastro - CARPAPA{% endblock %}
+
+{% block conteudo %}
+<div class="container">
+    <div class="dashboard-header">
+        <h1>Olá, {{ user.get_full_name|default:user.username }}!</h1>
+        <p>Bem-vindo ao seu painel de agricultor</p>
+    </div>
+
+    <!-- Status do Cadastro -->
+    <div class="card">
+        <h2 class="card-title">Status do Cadastro</h2>
+
+        <div class="status-info">
+            <div class="status-badge">
+                <span class="status status--{{ perfil.status }}">
+                    {{ perfil.get_status_display }}
+                </span>
+            </div>
+
+            <div class="status-details">
+                <p><strong>Data do Cadastro:</strong> {{ perfil.data_cadastro|date:"d/m/Y" }}</p>
+                {% if perfil.data_atualizacao %}
+                    <p><strong>Última Atualização:</strong> {{ perfil.data_atualizacao|date:"d/m/Y" }}</p>
+                {% endif %}
+                {% if perfil.data_validacao %}
+                    <p><strong>Data da Validação:</strong> {{ perfil.data_validacao|date:"d/m/Y" }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if perfil.status == 'pendente' %}
+            <div class="alert alert-info">
+                <p>Seu cadastro está sendo analisado pelos técnicos. Você pode editar seus dados enquanto estiver pendente.</p>
+            </div>
+        {% elif perfil.status == 'em_analise' %}
+            <div class="alert alert-warning">
+                <p>Seu cadastro está em análise técnica. Você não pode editar os dados neste momento.</p>
+            </div>
+        {% elif perfil.status == 'aprovado' %}
+            <div class="alert alert-success">
+                <p>Seu cadastro foi aprovado! Você pode visualizar seus dados mas não editá-los.</p>
+            </div>
+        {% elif perfil.status == 'rejeitado' %}
+            <div class="alert alert-error">
+                <p>Seu cadastro foi rejeitado. Verifique as observações do técnico abaixo.</p>
+            </div>
+        {% endif %}
+
+        {% if perfil.observacoes_tecnico %}
+            <div class="observacoes-tecnico">
+                <h3>Observações do Técnico</h3>
+                <p>{{ perfil.observacoes_tecnico }}</p>
+                {% if perfil.tecnico_responsavel %}
+                    <small>Técnico responsável: {{ perfil.tecnico_responsavel.usuario.get_full_name }}</small>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Dados Pessoais -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Dados Pessoais</h2>
+            {% if perfil.status == 'pendente' %}
+                <a href="{% url 'editar_perfil_agricultor' %}" class="btn-secundario">Editar</a>
+            {% endif %}
+        </div>
+
+        <div class="dados-grid">
+            <div class="dado-item">
+                <strong>Nome Completo:</strong>
+                <span>{{ perfil.nome_completo }}</span>
+            </div>
+            <div class="dado-item">
+                <strong>CPF:</strong>
+                <span>{{ perfil.cpf|mascarar_cpf }}</span>
+            </div>
+            <div class="dado-item">
+                <strong>RG:</strong>
+                <span>{{ perfil.rg }}</span>
+            </div>
+            <div class="dado-item">
+                <strong>E-mail:</strong>
+                <span>{{ perfil.email }}</span>
+            </div>
+            <div class="dado-item">
+                <strong>Telefone:</strong>
+                <span>{{ perfil.telefone|mascarar_telefone }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Endereço -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Endereço</h2>
+            {% if perfil.status == 'pendente' %}
+                <a href="{% url 'editar_perfil_agricultor' %}" class="btn-secundario">Editar</a>
+            {% endif %}
+        </div>
+
+        <div class="endereco-info">
+            <p>{{ perfil.endereco }}</p>
+            {% if perfil.numero %}
+                <p>Número: {{ perfil.numero }}</p>
+            {% endif %}
+            {% if perfil.complemento %}
+                <p>Complemento: {{ perfil.complemento }}</p>
+            {% endif %}
+            <p>{{ perfil.bairro }} - {{ perfil.cidade }}/{{ perfil.estado }}</p>
+            <p>CEP: {{ perfil.cep }}</p>
+        </div>
+    </div>
+
+    <!-- Dados da Propriedade -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Dados da Propriedade</h2>
+            {% if perfil.status == 'pendente' %}
+                <a href="{% url 'editar_perfil_agricultor' %}" class="btn-secundario">Editar</a>
+            {% endif %}
+        </div>
+
+        <div class="dados-grid">
+            <div class="dado-item">
+                <strong>Nome da Propriedade:</strong>
+                <span>{{ perfil.nome_propriedade }}</span>
+            </div>
+            <div class="dado-item">
+                <strong>Área Total:</strong>
+                <span>{{ perfil.tamanho_total_ha }} ha</span>
+            </div>
+            <div class="dado-item">
+                <strong>Reserva Legal:</strong>
+                <span>{{ perfil.tamanho_reserva_legal_ha }} ha</span>
+            </div>
+            <div class="dado-item">
+                <strong>APP:</strong>
+                <span>{{ perfil.tamanho_app_ha }} ha</span>
+            </div>
+            <div class="dado-item">
+                <strong>Área de Uso:</strong>
+                <span>{{ perfil.tamanho_area_uso_ha }} ha</span>
+            </div>
+            <div class="dado-item">
+                <strong>Área Consolidada:</strong>
+                <span>{{ perfil.tamanho_area_consolidada_ha }} ha</span>
+            </div>
+        </div>
+
+        <div class="confrontantes">
+            <h3>Confrontantes</h3>
+            <p>{{ perfil.nomes_confrontantes|linebreaks }}</p>
+        </div>
+    </div>
+
+    <!-- Dados Geoespaciais -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="card-title">Dados Geoespaciais</h2>
+            {% if perfil.status == 'pendente' %}
+                <a href="{% url 'editar_perfil_agricultor' %}" class="btn-secundario">Editar</a>
+            {% endif %}
+        </div>
+
+        <div class="dados-grid">
+            <div class="dado-item">
+                <strong>Corpos Hídricos:</strong>
+                <span>{{ perfil.numero_corpos_hidricos }} (rios, igarapés, córregos)</span>
+            </div>
+            <div class="dado-item">
+                <strong>Nascentes:</strong>
+                <span>{{ perfil.numero_nascentes }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Documento -->
+    {% if perfil.documento_posse %}
+    <div class="card">
+        <h2 class="card-title">Documento de Posse</h2>
+        <div class="documento-info">
+            <p><strong>Arquivo:</strong> {{ perfil.documento_posse.name|slice:"12:" }}</p>
+            <a href="{{ perfil.documento_posse.url }}" target="_blank" class="btn-secundario">Visualizar Documento</a>
+            {% if perfil.status == 'pendente' %}
+                <a href="{% url 'editar_perfil_agricultor' %}" class="btn-secundario">Alterar Documento</a>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.dashboard-header h1 {
+    color: var(--verde-principal);
+    margin-bottom: 0.5rem;
+}
+
+.status-info {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.status-badge {
+    flex-shrink: 0;
+}
+
+.status-details p {
+    margin: 0.25rem 0;
+    font-size: 0.875rem;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+}
+
+.alert-info {
+    background-color: #e3f2fd;
+    color: var(--info);
+    border-left: 4px solid var(--info);
+}
+
+.alert-warning {
+    background-color: #fff3e0;
+    color: var(--aviso);
+    border-left: 4px solid var(--aviso);
+}
+
+.alert-success {
+    background-color: #e8f5e8;
+    color: var(--sucesso);
+    border-left: 4px solid var(--sucesso);
+}
+
+.alert-error {
+    background-color: #ffebee;
+    color: var(--erro);
+    border-left: 4px solid var(--erro);
+}
+
+.observacoes-tecnico {
+    background-color: #f5f5f5;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+}
+
+.observacoes-tecnico h3 {
+    margin-bottom: 0.5rem;
+    color: var(--verde-principal);
+}
+
+.dados-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.dado-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.dado-item strong {
+    color: var(--texto-escuro);
+    font-size: 0.875rem;
+}
+
+.endereco-info p {
+    margin: 0.25rem 0;
+}
+
+.confrontantes {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--borda);
+}
+
+.confrontantes h3 {
+    color: var(--verde-principal);
+    margin-bottom: 0.5rem;
+}
+
+.documento-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+@media (max-width: 768px) {
+    .status-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .dados-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+</style>
+{% endblock %}

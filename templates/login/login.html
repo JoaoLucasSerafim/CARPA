@@ -1,0 +1,158 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Login - CARPAPA{% endblock %}
+
+{% block conteudo %}
+<div class="container">
+    <div class="card" style="max-width: 400px; margin: 2rem auto;">
+        <h1 class="card-title">Entrar no CARPAPA</h1>
+
+        {% if messages %}
+            {% for message in messages %}
+                <p class="mensagem mensagem--{{ message.tags }}">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="username" class="form-label">Nome de Usuário ou E-mail</label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    class="form-control"
+                    placeholder="Seu nome de usuário"
+                    required
+                    autofocus
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">Senha</label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    class="form-control"
+                    placeholder="Sua senha"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="btn-principal">Entrar</button>
+        </form>
+
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px solid var(--borda); text-align: center;">
+            <p style="margin-bottom: 1rem;">Ainda não tem conta?</p>
+            <a href="{% url 'cadastro_agricultor' %}" class="btn-secundario" style="display: inline-block;">
+                Criar Conta de Agricultor
+            </a>
+        </div>
+
+        <div style="margin-top: 1.5rem; padding: 1rem; background-color: #f9f9f9; border-radius: 6px; border-left: 4px solid var(--verde-principal); font-size: 0.875rem;">
+            <p style="margin: 0;"><strong>Dica:</strong></p>
+            <p style="margin: 0.25rem 0 0 0;">
+                Se você é um técnico do governo do Pará, sua conta foi criada pelo administrador do sistema. Use o mesmo nome de usuário ou e-mail.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+    color: var(--texto-escuro);
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1.5px solid var(--borda);
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--verde-principal);
+    box-shadow: 0 0 0 3px rgba(46, 125, 50, 0.1);
+}
+
+.btn-principal {
+    width: 100%;
+    padding: 0.85rem;
+    background-color: var(--verde-principal);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-principal:hover {
+    background-color: var(--verde-claro);
+}
+
+.btn-secundario {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    background-color: var(--cinza-claro);
+    color: var(--texto-principal);
+    border: 1.5px solid var(--borda-escura);
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.btn-secundario:hover {
+    background-color: var(--borda);
+    border-color: var(--verde-principal);
+}
+
+.mensagem {
+    padding: 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    border-left: 4px solid;
+}
+
+.mensagem--success {
+    background-color: #E8F5E9;
+    border-color: var(--sucesso);
+    color: var(--sucesso);
+}
+
+.mensagem--error {
+    background-color: #FFEBEE;
+    border-color: var(--erro);
+    color: var(--erro);
+}
+
+.mensagem--warning {
+    background-color: #FFF3E0;
+    border-color: var(--aviso);
+    color: var(--aviso);
+}
+
+.mensagem--info {
+    background-color: #E3F2FD;
+    border-color: var(--info);
+    color: var(--info);
+}
+</style>
+{% endblock %}

@@ -1,0 +1,279 @@
+{% extends 'base.html' %}
+{% load carpa_filters %}
+
+{% block titulo %}Detalhes do Cadastro - CARPAPA{% endblock %}
+
+{% block conteudo %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <h1 class="card-title">Detalhes do Cadastro</h1>
+            <div class="header-actions">
+                <a href="{% url 'dashboard_tecnico' %}" class="btn-secundario">Voltar</a>
+                {% if agricultor.status == 'pendente' %}
+                    <a href="{% url 'validar_cadastro' agricultor.pk %}" class="btn-principal">Validar Cadastro</a>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Status -->
+        <div class="status-section">
+            <div class="status-badge">
+                <span class="status status--{{ agricultor.status }}">
+                    {{ agricultor.get_status_display }}
+                </span>
+            </div>
+            <div class="status-meta">
+                <p><strong>Data do Cadastro:</strong> {{ agricultor.data_cadastro|date:"d/m/Y H:i" }}</p>
+                {% if agricultor.data_atualizacao %}
+                    <p><strong>Última Atualização:</strong> {{ agricultor.data_atualizacao|date:"d/m/Y H:i" }}</p>
+                {% endif %}
+                {% if agricultor.data_validacao %}
+                    <p><strong>Data da Validação:</strong> {{ agricultor.data_validacao|date:"d/m/Y H:i" }}</p>
+                {% endif %}
+                {% if agricultor.tecnico_responsavel %}
+                    <p><strong>Técnico Responsável:</strong> {{ agricultor.tecnico_responsavel.usuario.get_full_name }}</p>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if agricultor.observacoes_tecnico %}
+            <div class="observacoes-tecnico">
+                <h3>Observações do Técnico</h3>
+                <p>{{ agricultor.observacoes_tecnico }}</p>
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- Dados Pessoais -->
+    <div class="card">
+        <h2 class="card-title">Dados Pessoais</h2>
+
+        <div class="dados-grid">
+            <div class="dado-item">
+                <strong>Nome Completo:</strong>
+                <span>{{ agricultor.nome_completo }}</span>
+            </div>
+            <div class="dado-item">
+                <strong>CPF:</strong>
+                <span>{{ agricultor.cpf|mascarar_cpf }}</span>
+            </div>
+            <div class="dado-item">
+                <strong>RG:</strong>
+                <span>{{ agricultor.rg }}</span>
+            </div>
+            <div class="dado-item">
+                <strong>E-mail:</strong>
+                <span>{{ agricultor.email }}</span>
+            </div>
+            <div class="dado-item">
+                <strong>Telefone:</strong>
+                <span>{{ agricultor.telefone|mascarar_telefone }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Endereço -->
+    <div class="card">
+        <h2 class="card-title">Endereço</h2>
+
+        <div class="endereco-info">
+            <p>{{ agricultor.endereco }}</p>
+            {% if agricultor.numero %}
+                <p>Número: {{ agricultor.numero }}</p>
+            {% endif %}
+            {% if agricultor.complemento %}
+                <p>Complemento: {{ agricultor.complemento }}</p>
+            {% endif %}
+            <p>{{ agricultor.bairro }} - {{ agricultor.cidade }}/{{ agricultor.estado }}</p>
+            <p>CEP: {{ agricultor.cep }}</p>
+        </div>
+    </div>
+
+    <!-- Dados da Propriedade -->
+    <div class="card">
+        <h2 class="card-title">Dados da Propriedade</h2>
+
+        <div class="dados-grid">
+            <div class="dado-item">
+                <strong>Nome da Propriedade:</strong>
+                <span>{{ agricultor.nome_propriedade }}</span>
+            </div>
+            <div class="dado-item">
+                <strong>Área Total:</strong>
+                <span>{{ agricultor.tamanho_total_ha }} ha</span>
+            </div>
+            <div class="dado-item">
+                <strong>Reserva Legal:</strong>
+                <span>{{ agricultor.tamanho_reserva_legal_ha }} ha</span>
+            </div>
+            <div class="dado-item">
+                <strong>APP:</strong>
+                <span>{{ agricultor.tamanho_app_ha }} ha</span>
+            </div>
+            <div class="dado-item">
+                <strong>Área de Uso:</strong>
+                <span>{{ agricultor.tamanho_area_uso_ha }} ha</span>
+            </div>
+            <div class="dado-item">
+                <strong>Área Consolidada:</strong>
+                <span>{{ agricultor.tamanho_area_consolidada_ha }} ha</span>
+            </div>
+        </div>
+
+        <div class="confrontantes">
+            <h3>Confrontantes</h3>
+            <p>{{ agricultor.nomes_confrontantes|linebreaks }}</p>
+        </div>
+    </div>
+
+    <!-- Dados Geoespaciais -->
+    <div class="card">
+        <h2 class="card-title">Dados Geoespaciais</h2>
+
+        <div class="dados-grid">
+            <div class="dado-item">
+                <strong>Corpos Hídricos:</strong>
+                <span>{{ agricultor.numero_corpos_hidricos }} (rios, igarapés, córregos)</span>
+            </div>
+            <div class="dado-item">
+                <strong>Nascentes:</strong>
+                <span>{{ agricultor.numero_nascentes }}</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Documento -->
+    {% if agricultor.documento_posse %}
+    <div class="card">
+        <h2 class="card-title">Documento de Posse</h2>
+        <div class="documento-info">
+            <p><strong>Arquivo:</strong> {{ agricultor.documento_posse.name|slice:"12:" }}</p>
+            <a href="{{ agricultor.documento_posse.url }}" target="_blank" class="btn-principal">Visualizar Documento</a>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Ações -->
+    <div class="card">
+        <div class="form-actions">
+            <a href="{% url 'dashboard_tecnico' %}" class="btn-secundario">Voltar para Lista</a>
+            {% if agricultor.status == 'pendente' %}
+                <a href="{% url 'validar_cadastro' agricultor.pk %}" class="btn-principal">Validar Cadastro</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_head %}
+<style>
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.header-actions {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.status-section {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+}
+
+.status-meta p {
+    margin: 0.25rem 0;
+    font-size: 0.875rem;
+}
+
+.observacoes-tecnico {
+    background-color: #fff3e0;
+    padding: 1rem;
+    border-radius: 6px;
+    margin-top: 1rem;
+    border-left: 4px solid var(--aviso);
+}
+
+.observacoes-tecnico h3 {
+    margin-bottom: 0.5rem;
+    color: var(--aviso);
+}
+
+.dados-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.dado-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.dado-item strong {
+    color: var(--texto-escuro);
+    font-size: 0.875rem;
+}
+
+.endereco-info p {
+    margin: 0.25rem 0;
+}
+
+.confrontantes {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--borda);
+}
+
+.confrontantes h3 {
+    color: var(--verde-principal);
+    margin-bottom: 0.5rem;
+}
+
+.documento-info {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+}
+
+@media (max-width: 768px) {
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .status-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+
+    .dados-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+{% endblock %}
