@@ -117,6 +117,22 @@
                 </div>
 
                 <div class="form-group">
+                    {{ form.cidade_propriedade.label_tag }}
+                    {{ form.cidade_propriedade }}
+                    {% if form.cidade_propriedade.errors %}
+                        <div class="error">{{ form.cidade_propriedade.errors.0 }}</div>
+                    {% endif %}
+                    </div>
+
+                    <div class="form-group">
+                    {{ form.acesso_propriedade.label_tag }}
+                    {{ form.acesso_propriedade }}
+                    {% if form.acesso_propriedade.errors %}
+                        <div class="error">{{ form.acesso_propriedade.errors.0 }}</div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group">
                     {{ form.nomes_confrontantes.label_tag }}
                     {{ form.nomes_confrontantes }}
                     {% if form.nomes_confrontantes.help_text %}
@@ -227,6 +243,16 @@
                 <button type="submit" class="btn-principal">Criar Conta</button>
                 <a href="{% url 'login' %}" class="btn-secundario">Já tenho conta</a>
             </div>
+
+            <fieldset>
+            <legend>Fotos da Propriedade</legend>
+                <div class="form-group">{{ form.foto_reserva_legal.label_tag }} {{ form.foto_reserva_legal }}</div>
+                <div class="form-group">{{ form.foto_app.label_tag }} {{ form.foto_app }}</div>
+                <div class="form-group">{{ form.foto_area_uso.label_tag }} {{ form.foto_area_uso }}</div>
+                <div class="form-group">{{ form.foto_area_consolidada.label_tag }} {{ form.foto_area_consolidada }}</div>
+                <div class="form-group">{{ form.foto_corpos_hidricos.label_tag }} {{ form.foto_corpos_hidricos }}</div>
+                <div class="form-group">{{ form.foto_nascentes.label_tag }} {{ form.foto_nascentes }}</div>
+            </fieldset>
         </form>
     </div>
 </div>

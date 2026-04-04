@@ -38,34 +38,87 @@ class PerfilAgricultor(models.Model):
     )
 
     # ====== DADOS DA PROPRIEDADE/POSSE ======
+    # ====== DADOS DA PROPRIEDADE/POSSE ======
     nome_propriedade = models.CharField(max_length=255)
+    cidade_propriedade = models.CharField(           # NOVO
+        max_length=100,
+        blank=True,
+        help_text="Cidade onde a propriedade/posse está localizada (pode ser diferente da cidade de residência)"
+    )
+    acesso_propriedade = models.TextField(           # NOVO
+        blank=True,
+        help_text="Como chegar à propriedade: referências, estradas, ramais, distâncias"
+    )
     nomes_confrontantes = models.TextField(
         help_text="Nomes dos vizinhos/confrontantes separados por vírgula"
     )
+        # ====== ÁREAS EM HECTARES ======
     tamanho_total_ha = models.DecimalField(
         max_digits=10,
         decimal_places=4,
-        help_text="Tamanho total da área em hectares"
+        null=True,
+        blank=True
     )
+
     tamanho_reserva_legal_ha = models.DecimalField(
         max_digits=10,
         decimal_places=4,
-        help_text="Tamanho da reserva legal em hectares"
+        null=True,
+        blank=True
     )
+
     tamanho_app_ha = models.DecimalField(
         max_digits=10,
         decimal_places=4,
-        help_text="Tamanho da Área de Preservação Permanente em hectares"
+        null=True,
+        blank=True
     )
+
     tamanho_area_uso_ha = models.DecimalField(
         max_digits=10,
         decimal_places=4,
-        help_text="Tamanho da área de uso em hectares"
+        null=True,
+        blank=True
     )
+
     tamanho_area_consolidada_ha = models.DecimalField(
         max_digits=10,
         decimal_places=4,
-        help_text="Tamanho da área consolidada em hectares"
+        null=True,
+        blank=True
+    )
+    # ... campos de tamanho existentes permanecem iguais ...
+
+    # ====== FOTOS DA PROPRIEDADE ======        # NOVO — bloco inteiro
+    foto_reserva_legal = models.ImageField(
+        upload_to='fotos/reserva_legal/',
+        blank=True, null=True,
+        help_text="Foto da Reserva Legal (RL) — preferencialmente com coordenadas GPS"
+    )
+    foto_app = models.ImageField(
+        upload_to='fotos/app/',
+        blank=True, null=True,
+        help_text="Foto da Área de Preservação Permanente (APP)"
+    )
+    foto_area_uso = models.ImageField(
+        upload_to='fotos/area_uso/',
+        blank=True, null=True,
+        help_text="Foto da Área de Uso"
+    )
+    foto_area_consolidada = models.ImageField(
+        upload_to='fotos/area_consolidada/',
+        blank=True, null=True,
+        help_text="Foto da Área Consolidada"
+    )
+    foto_corpos_hidricos = models.ImageField(
+        upload_to='fotos/corpos_hidricos/',
+        blank=True, null=True,
+        help_text="Foto dos Corpos Hídricos (rios, igarapés, córregos)"
+    )
+    foto_nascentes = models.ImageField(
+        upload_to='fotos/nascentes/',
+        blank=True, null=True,
+        help_text="Foto das Nascentes"
     )
 
     # ====== DADOS GEOESPACIAIS ======
