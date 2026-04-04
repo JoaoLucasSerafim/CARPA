@@ -141,6 +141,8 @@ def cadastro_agricultor(request):
                     cidade=form.cleaned_data['cidade'],
                     estado=form.cleaned_data['estado'],
                     nome_propriedade=form.cleaned_data['nome_propriedade'],
+                    cidade_propriedade=form.cleaned_data.get('cidade_propriedade', ''),
+                    acesso_propriedade=form.cleaned_data.get('acesso_propriedade', ''),
                     nomes_confrontantes=form.cleaned_data['nomes_confrontantes'],
                     tamanho_total_ha=form.cleaned_data['tamanho_total_ha'],
                     tamanho_reserva_legal_ha=form.cleaned_data['tamanho_reserva_legal_ha'],
@@ -150,8 +152,13 @@ def cadastro_agricultor(request):
                     numero_corpos_hidricos=form.cleaned_data['numero_corpos_hidricos'],
                     numero_nascentes=form.cleaned_data['numero_nascentes'],
                     documento_posse=form.cleaned_data.get('documento_posse'),
+                    foto_reserva_legal=form.cleaned_data.get('foto_reserva_legal'),
+                    foto_app=form.cleaned_data.get('foto_app'),
+                    foto_area_uso=form.cleaned_data.get('foto_area_uso'),
+                    foto_area_consolidada=form.cleaned_data.get('foto_area_consolidada'),
+                    foto_corpos_hidricos=form.cleaned_data.get('foto_corpos_hidricos'),
+                    foto_nascentes=form.cleaned_data.get('foto_nascentes'),
                 )
-
                 # Fazer login automático
                 login(request, user)
                 messages.success(request, f'Conta criada com sucesso! Bem-vindo, {user.get_full_name() or user.username}!')

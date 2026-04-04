@@ -154,6 +154,26 @@ class FormCadastroAgricultor(forms.Form):
             'class': 'form-control'
         })
     )
+    cidade_propriedade = forms.CharField(
+        max_length=100,
+        label="Cidade da Propriedade",
+        required=False,
+        widget=forms.TextInput(attrs={
+            'placeholder': 'Cidade onde fica a propriedade',
+            'class': 'form-control'
+        })
+    )
+
+    acesso_propriedade = forms.CharField(
+        required=False,
+        label="Como chegar à propriedade",
+        widget=forms.Textarea(attrs={
+            'rows': 3,
+            'placeholder': 'Ex.: entrar no ramal X, seguir 3 km, casa à direita...',
+            'class': 'form-control'
+        })
+    )
+
     nomes_confrontantes = forms.CharField(
         widget=forms.Textarea(attrs={
             'rows': 3,
@@ -164,6 +184,13 @@ class FormCadastroAgricultor(forms.Form):
         help_text="Separe os nomes por vírgula"
     )
 
+    foto_reserva_legal = forms.ImageField(required=False, label="Foto da Reserva Legal")
+    foto_app = forms.ImageField(required=False, label="Foto da APP")
+    foto_area_uso = forms.ImageField(required=False, label="Foto da Área de Uso")
+    foto_area_consolidada = forms.ImageField(required=False, label="Foto da Área Consolidada")
+    foto_corpos_hidricos = forms.ImageField(required=False, label="Foto dos Corpos Hídricos")
+    foto_nascentes = forms.ImageField(required=False, label="Foto das Nascentes")
+    
     # ====== AREAS EM HECTARES ======
     tamanho_total_ha = forms.DecimalField(
         max_digits=10,
