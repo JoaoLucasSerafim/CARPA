@@ -45,7 +45,7 @@ body {
 
 /* ===== TIPOGRAFIA ===== */
 h1, h2, h3, h4, h5, h6 {
-    color: var(--texto-escuro);
+    color: #fff;
     line-height: 1.4;
     margin-bottom: 1rem;
     font-weight: 600;
@@ -144,7 +144,7 @@ header nav ul {
 }
 
 header nav li a {
-    color: var(--texto-principal);
+    color: #fff;
     font-weight: 500;
     padding: 0.5rem 1rem;
     border-radius: 4px;
