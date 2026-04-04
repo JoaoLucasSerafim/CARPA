@@ -85,6 +85,11 @@ p {
     margin-bottom: 1rem;
 }
 
+.dica {
+    margin-bottom: 1rem;
+    color: black;
+}
+
 a {
     color: var(--verde-principal);
     text-decoration: none;

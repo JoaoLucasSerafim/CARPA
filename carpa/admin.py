@@ -1,7 +1,51 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
+from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import PerfilAgricultor, PerfilTecnico
 
+class PerfilTecnicoInline(admin.StackedInline):
+    model = PerfilTecnico
+    can_delete = False
+    verbose_name = "Perfil de Técnico"
+    verbose_name_plural = "Perfil de Técnico"
+    extra = 0
+    fields = ('matricula', 'setor', 'especializacao', 'telefone', 'email_profissional')
 
+class FormCriacaoUsuarioPT(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].help_text = (
+            'Obrigatório. Até 150 caracteres. '
+            'Letras, números e os símbolos @, ., +, -, _ são permitidos.'
+        )
+        self.fields['password1'].help_text = (
+            'A senha deve ter pelo menos 8 caracteres e não pode ser muito simples.'
+        )
+        self.fields['password2'].help_text = (
+            'Digite a mesma senha novamente para confirmação.'
+        )
+
+class FormEdicaoUsuarioPT(UserChangeForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].help_text = (
+            'Obrigatório. Até 150 caracteres. '
+            'Letras, números e os símbolos @, ., +, -, _ são permitidos.'
+        )
+
+
+class UserAdminComTecnico(BaseUserAdmin):
+    add_form = FormCriacaoUsuarioPT   # formulário de criação
+    form = FormEdicaoUsuarioPT        # formulário de edição
+    inlines = [PerfilTecnicoInline]
+
+class UserAdminComTecnico(BaseUserAdmin):
+    inlines = [PerfilTecnicoInline]
+
+
+admin.site.unregister(User)
+admin.site.register(User, UserAdminComTecnico)
 @admin.register(PerfilAgricultor)
 class PerfilAgricultorAdmin(admin.ModelAdmin):
     """
