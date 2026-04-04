@@ -4,6 +4,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from .models import PerfilAgricultor, PerfilTecnico
 
+
+# ── Inline do Técnico dentro do User ─────────────────────────────────────────
+
 class PerfilTecnicoInline(admin.StackedInline):
     model = PerfilTecnico
     can_delete = False
@@ -11,6 +14,7 @@ class PerfilTecnicoInline(admin.StackedInline):
     verbose_name_plural = "Perfil de Técnico"
     extra = 0
     fields = ('matricula', 'setor', 'especializacao', 'telefone', 'email_profissional')
+
 
 class FormCriacaoUsuarioPT(UserCreationForm):
     def __init__(self, *args, **kwargs):
@@ -26,6 +30,7 @@ class FormCriacaoUsuarioPT(UserCreationForm):
             'Digite a mesma senha novamente para confirmação.'
         )
 
+
 class FormEdicaoUsuarioPT(UserChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -36,16 +41,17 @@ class FormEdicaoUsuarioPT(UserChangeForm):
 
 
 class UserAdminComTecnico(BaseUserAdmin):
-    add_form = FormCriacaoUsuarioPT   # formulário de criação
-    form = FormEdicaoUsuarioPT        # formulário de edição
-    inlines = [PerfilTecnicoInline]
-
-class UserAdminComTecnico(BaseUserAdmin):
+    add_form = FormCriacaoUsuarioPT
+    form = FormEdicaoUsuarioPT
     inlines = [PerfilTecnicoInline]
 
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdminComTecnico)
+
+
+# ── PerfilAgricultor ──────────────────────────────────────────────────────────
+
 @admin.register(PerfilAgricultor)
 class PerfilAgricultorAdmin(admin.ModelAdmin):
     """
@@ -55,11 +61,12 @@ class PerfilAgricultorAdmin(admin.ModelAdmin):
         'nome_completo',
         'cpf',
         'nome_propriedade',
+        'cidade_propriedade',
         'status',
         'data_cadastro'
     )
     list_filter = ('status', 'data_cadastro', 'estado')
-    search_fields = ('nome_completo', 'cpf', 'nome_propriedade', 'endereco')
+    search_fields = ('nome_completo', 'cpf', 'nome_propriedade', 'endereco', 'cidade_propriedade')
     readonly_fields = ('data_cadastro', 'data_atualizacao', 'data_validacao')
 
     fieldsets = (
@@ -75,7 +82,7 @@ class PerfilAgricultorAdmin(admin.ModelAdmin):
                 'telefone'
             )
         }),
-        ('Endereço', {
+        ('Endereço de Residência', {
             'fields': (
                 'cep',
                 'endereco',
@@ -87,13 +94,15 @@ class PerfilAgricultorAdmin(admin.ModelAdmin):
             ),
             'classes': ('collapse',)
         }),
-        ('Documetação', {
+        ('Documentação', {
             'fields': ('documento_posse',),
             'classes': ('collapse',)
         }),
         ('Dados da Propriedade', {
             'fields': (
                 'nome_propriedade',
+                'cidade_propriedade',       # NOVO
+                'acesso_propriedade',       # NOVO
                 'nomes_confrontantes',
                 'tamanho_total_ha',
                 'tamanho_reserva_legal_ha',
@@ -109,6 +118,18 @@ class PerfilAgricultorAdmin(admin.ModelAdmin):
             ),
             'classes': ('collapse',)
         }),
+        ('Fotos da Propriedade', {           # NOVO
+            'fields': (
+                'foto_reserva_legal',
+                'foto_app',
+                'foto_area_uso',
+                'foto_area_consolidada',
+                'foto_corpos_hidricos',
+                'foto_nascentes'
+            ),
+            'classes': ('collapse',),
+            'description': 'Envie fotos de cada área. Fotos tiradas com GPS ativado terão coordenadas geográficas registradas automaticamente.'
+        }),
         ('Status e Validação', {
             'fields': (
                 'status',
@@ -122,13 +143,15 @@ class PerfilAgricultorAdmin(admin.ModelAdmin):
     )
 
 
+# ── PerfilTecnico ─────────────────────────────────────────────────────────────
+
 @admin.register(PerfilTecnico)
 class PerfilTecnicoAdmin(admin.ModelAdmin):
     """
     Admin customizado para PerfilTecnico.
     """
     list_display = (
-        'usuario',
+        'get_nome',
         'matricula',
         'setor',
         'data_criacao'
@@ -158,3 +181,7 @@ class PerfilTecnicoAdmin(admin.ModelAdmin):
             'classes': ('collapse',)
         }),
     )
+
+    def get_nome(self, obj):
+        return obj.usuario.get_full_name() or obj.usuario.username
+    get_nome.short_description = "Nome do Técnico"
