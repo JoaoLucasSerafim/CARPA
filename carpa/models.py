@@ -52,6 +52,41 @@ class PerfilAgricultor(models.Model):
     nomes_confrontantes = models.TextField(
         help_text="Nomes dos vizinhos/confrontantes separados por vírgula"
     )
+        # ====== ÁREAS EM HECTARES ======
+    tamanho_total_ha = models.DecimalField(
+        max_digits=10,
+        decimal_places=4,
+        null=True,
+        blank=True
+    )
+
+    tamanho_reserva_legal_ha = models.DecimalField(
+        max_digits=10,
+        decimal_places=4,
+        null=True,
+        blank=True
+    )
+
+    tamanho_app_ha = models.DecimalField(
+        max_digits=10,
+        decimal_places=4,
+        null=True,
+        blank=True
+    )
+
+    tamanho_area_uso_ha = models.DecimalField(
+        max_digits=10,
+        decimal_places=4,
+        null=True,
+        blank=True
+    )
+
+    tamanho_area_consolidada_ha = models.DecimalField(
+        max_digits=10,
+        decimal_places=4,
+        null=True,
+        blank=True
+    )
     # ... campos de tamanho existentes permanecem iguais ...
 
     # ====== FOTOS DA PROPRIEDADE ======        # NOVO — bloco inteiro

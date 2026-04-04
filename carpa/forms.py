@@ -410,6 +410,8 @@ class FormEditarPerfilAgricultor(forms.ModelForm):
             'numero_corpos_hidricos',
             'numero_nascentes',
             'documento_posse',
+            'cidade_propriedade',
+            'acesso_propriedade',
         ]
 
         widgets = {
