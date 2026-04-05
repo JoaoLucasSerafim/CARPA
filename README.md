@@ -7,6 +7,8 @@ Ferramenta web que democratiza o acesso ao [Cadastro Ambiental Rural (CAR)](http
 > Ferramenta complementar ao CAR do [SICAR](https://www.car.gov.br/).
 > 
 > Acesso em: [site](https://carpapa.azurewebsites.net/)
+>
+> Procurando pelo apk android? [aqui!](https://joaolucasserafim.github.io/CARPAPA-Android/)
 
 ---
 
